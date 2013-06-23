@@ -1,0 +1,11 @@
+﻿<Window x:Class="MVVM_Sample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Депозитный калькулятор"
+        xmlns:w="clr-namespace:MVVM_Sample"
+        Width="350" Height="290" ResizeMode="NoResize" Loaded="Window_Loaded">
+    <StackPanel>
+        <w:UserControl_View_ x:Name="depCalcMain" HorizontalAlignment="Stretch"
+                             Margin="5" VerticalAlignment="Stretch" />
+    </StackPanel>
+</Window>

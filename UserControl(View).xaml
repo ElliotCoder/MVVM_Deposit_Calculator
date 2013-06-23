@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="MVVM_Sample.UserControl_View_"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:w="clr-namespace:MVVM_Sample"
+             x:Name="depositClaculationControl">
+    <Grid Width="320">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="1.5*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock VerticalAlignment="Center" TextAlignment="Right"
+                   Margin="5" Grid.Row="3" Text="Процент"/>
+        <TextBox Text="{Binding Path=Model.Percentage, Mode=TwoWay,
+            UpdateSourceTrigger=PropertyChanged}"
+                 Grid.Row="3" Grid.Column="1" Margin="2" Name="tbPercentage"/>
+        <Label Grid.Row="4" Grid.ColumnSpan="2"
+               Content="{Binding Path=SelectedExpression.Description}"
+               HorizontalAlignment="Stretch" Name="lblExpression"
+               VerticalAlignment="Stretch" HorizontalContentAlignment="Center"
+               VerticalContentAlignment="Center" />
+        <TextBlock VerticalAlignment="Center" TextAlignment="Right"
+                   Margin="5" Grid.Row="0" Text="Формула"/>
+        <ComboBox ItemsSource="{Binding Path=Model.ExpressionsList}"
+                  SelectedItem="{Binding Path=SelectedExpression, Mode=TwoWay}"
+                  Grid.Row="0" Grid.Column="1" Margin="2" Name="cbExpression">
+            <ComboBox.Resources>
+                <DataTemplate DataType="{x:Type w:ExpressionWrapper}"> <!-- Шаблон данных -->
+                    <StackPanel Orientation="Horizontal" Margin="2">
+                        <TextBlock Text="{Binding Path=Name}" Margin="5,0"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.Resources>
+        </ComboBox>
+        <TextBlock VerticalAlignment="Center" Margin="5" TextAlignment="Right"
+                   Grid.Row="2" Text="Сумма"/>
+        <TextBox Text="{Binding Path=Model.Periods, UpdateSourceTrigger=PropertyChanged}"
+                 Grid.Row="1" Grid.Column="1" Margin="2" Name="tbSum"/>
+        <TextBlock VerticalAlignment="Center" Margin="5" TextAlignment="Right"
+                   Grid.Row="1" Text="Количество периодов"/>
+        <TextBox Text="{Binding Path=Model.StartingSum, UpdateSourceTrigger=PropertyChanged}"
+                 Grid.Row="2" Grid.Column="1" Margin="2" Name="tbPeriodCount"/>
+        <Button Grid.Row="5" Grid.ColumnSpan="2" Margin="2" Content="Рассчитать"
+                Command="{Binding Path=CalculateDepositCommand, Mode=OneTime}">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="IsEnabled" Value="false" />
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding ElementName=tbPeriodCount,
+                                    Path=(Validation.HasError)}" Value="false" />
+                                <Condition Binding="{Binding ElementName=tbPercentage,
+                                    Path=(Validation.HasError)}" Value="false" />
+                                <Condition Binding="{Binding ElementName=tbSum,
+                                    Path=(Validation.HasError)}" Value="false" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="IsEnabled" Value="true" />
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+        <TextBox AcceptsReturn="True" TextWrapping="Wrap"
+                 Text="{Binding Path=UserOutput, Mode=TwoWay}"
+                 Grid.Row="6" Grid.ColumnSpan="2" Margin="5"
+                 Name="tbResult" IsReadOnly="True"/>
+    </Grid>
+</UserControl>
